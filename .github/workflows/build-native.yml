@@ -88,37 +88,46 @@ jobs:
       - name: Copy binary to platform package
         shell: bash
         run: |
-          # Map NAPI-RS output directory to platform package directory
+          # NAPI-RS creates files as npm/packages/core/index.{platform}.node
+          # We need to copy them to npm/core/platforms/{platform}/ruvector.node
+
+          # Map platform names (NAPI-RS uses different naming for some platforms)
           case "${{ matrix.settings.platform }}" in
             linux-x64-gnu)
-              SRC="npm/core/native/linux-x64"
+              NAPI_PLATFORM="linux-x64-gnu"
               ;;
             linux-arm64-gnu)
-              SRC="npm/core/native/linux-arm64"
+              NAPI_PLATFORM="linux-arm64-gnu"
               ;;
             darwin-x64)
-              SRC="npm/core/native/darwin-x64"
+              NAPI_PLATFORM="darwin-x64"
               ;;
             darwin-arm64)
-              SRC="npm/core/native/darwin-arm64"
+              NAPI_PLATFORM="darwin-arm64"
               ;;
             win32-x64-msvc)
-              SRC="npm/core/native/win32-x64-msvc"
+              NAPI_PLATFORM="win32-x64-msvc"
               ;;
           esac
 
-          DEST="npm/core/platforms/${{ matrix.settings.platform }}"
+          SRC_FILE="npm/packages/core/index.${NAPI_PLATFORM}.node"
+          DEST_DIR="npm/core/platforms/${{ matrix.settings.platform }}"
+          DEST_FILE="${DEST_DIR}/ruvector.node"
 
-          echo "Looking for .node files in: $SRC"
-          ls -la "$SRC" || true
-
-          if [ -f "$SRC/ruvector.node" ]; then
-            echo "Copying $SRC/ruvector.node to $DEST/"
-            cp -v "$SRC/ruvector.node" "$DEST/"
-          else
-            echo "ERROR: ruvector.node not found in $SRC"
+          echo "Looking for: $SRC_FILE"
+          ls -lah "$SRC_FILE" || {
+            echo "ERROR: Expected file not found: $SRC_FILE"
+            echo "Searching for any .node files..."
+            find npm/packages/core -name "*.node" -type f
             exit 1
-          fi
+          }
+
+          echo "Copying $SRC_FILE to $DEST_FILE"
+          mkdir -p "$DEST_DIR"
+          cp -v "$SRC_FILE" "$DEST_FILE"
+
+          echo "Verifying copy:"
+          ls -lah "$DEST_FILE"
 
       - name: Test native module (native platform only)
         if: |
