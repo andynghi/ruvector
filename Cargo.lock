@@ -3295,6 +3295,26 @@ dependencies = [
 ]
 
 [[package]]
+name = "ruvector-cluster"
+version = "0.1.1"
+dependencies = [
+ "async-trait",
+ "bincode 2.0.1",
+ "chrono",
+ "dashmap",
+ "futures",
+ "parking_lot 0.12.5",
+ "rand 0.8.5",
+ "ruvector-core",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.17",
+ "tokio",
+ "tracing",
+ "uuid",
+]
+
+[[package]]
 name = "ruvector-collections"
 version = "0.1.1"
 dependencies = [
@@ -3383,6 +3403,44 @@ dependencies = [
  "thiserror 2.0.17",
  "tokio",
  "tracing",
+]
+
+[[package]]
+name = "ruvector-raft"
+version = "0.1.1"
+dependencies = [
+ "bincode 2.0.1",
+ "chrono",
+ "dashmap",
+ "futures",
+ "parking_lot 0.12.5",
+ "rand 0.8.5",
+ "ruvector-core",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.17",
+ "tokio",
+ "tracing",
+ "uuid",
+]
+
+[[package]]
+name = "ruvector-replication"
+version = "0.1.1"
+dependencies = [
+ "bincode 2.0.1",
+ "chrono",
+ "dashmap",
+ "futures",
+ "parking_lot 0.12.5",
+ "rand 0.8.5",
+ "ruvector-core",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.17",
+ "tokio",
+ "tracing",
+ "uuid",
 ]
 
 [[package]]
